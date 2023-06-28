@@ -5,15 +5,31 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
+#include <set>
 
 //! \brief A class that assembles a series of excerpts from a byte stream (possibly out of order,
 //! possibly overlapping) into an in-order byte stream.
 class StreamReassembler {
   private:
     // Your code here -- add private members as necessary.
+    // typedef pair<size_t, char> psc;
 
     ByteStream _output;  //!< The reassembled in-order byte stream
     size_t _capacity;    //!< The maximum number of bytes
+    size_t first_unacceptable;
+    size_t first_unread = 0;
+    size_t first_unassembale = 0;
+    struct seg {
+      size_t index;
+      size_t len;
+      std::string data;
+      bool operator<(const seg t) const {return index < t.index;}
+    };
+    std::set<seg> _buffer = {};
+    // std::vector<psc> _buffer;
+    bool _eof = false;
+    size_t _eofIndex = 0;
 
   public:
     //! \brief Construct a `StreamReassembler` that will store up to `capacity` bytes.
