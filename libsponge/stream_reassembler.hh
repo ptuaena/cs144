@@ -63,6 +63,8 @@ class StreamReassembler {
     //! \returns `true` if no substrings are waiting to be assembled
     bool empty() const;
     size_t get_first_unassembale() const { return this->first_unassembale; }
+    size_t get_first_unacceptable() const { return this->first_unacceptable; }
+    size_t get_first_unread() const { return this->first_unread; }
 };
 
 #endif  // SPONGE_LIBSPONGE_STREAM_REASSEMBLER_HH

@@ -11,6 +11,10 @@
 
 //! \brief The "sender" part of a TCP implementation.
 
+class RetransmissionTimeOut {
+
+};
+
 //! Accepts a ByteStream, divides it up into segments and sends the
 //! segments, keeps track of which segments are still in-flight,
 //! maintains the Retransmission Timer, and retransmits in-flight
@@ -31,6 +35,21 @@ class TCPSender {
 
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
+
+    bool _syn_sent = false;
+    bool _fin_sent = false;
+    uint16_t _recerve_windows_size = 0;
+    uint16_t _recerve_free_space = 0;
+    uint64_t _bytes_in_flight = 0;
+    unsigned int _consecutive_retransmissions = 0;
+    unsigned int _rto = 0;
+    unsigned int _time_elapsed = 0;
+    bool _timer_running = false;
+
+    std::queue<TCPSegment> _segments_outstanding{};
+
+    bool _ackno_valid(uint64_t abs_ackno);
+    void send_segment(TCPSegment &seg);
 
   public:
     //! Initialize a TCPSender
